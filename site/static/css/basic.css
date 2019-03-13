@@ -1,0 +1,22 @@
+.progress {
+    padding: 0px;
+    height: 3px;
+    border-radius: 10px;
+    background-color: gray;
+}
+
+.progress .inner {
+    height: 100%;
+    margin: 0px;
+    border-radius: 10px;
+    background-color: rgb(55, 245, 80);
+}
+
+#battle {
+    display: flex;
+}
+
+.pokescreen {
+    width: 20%;
+    margin: 25px;
+}

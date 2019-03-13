@@ -1,9 +1,10 @@
 const fs = require('fs')
-// const bcrypt = require('bcrypt')
 const Route = require('./Route')
 const mime = require('mime-types')
-// const utils = require('./Utils')
-// const axios = require('axios')
+const util = require('util')
+const pokedex = require('./objects/pokemon.js')
+
+pokedex.DynamicPokemonClassifier(JSON.parse(fs.readFileSync('./data/pokedex.json', 'utf8')))
 
 exports.routes = [
     /**
@@ -33,7 +34,7 @@ exports.routes = [
             res.setHeader('content-type', type)
         }
         try{
-            let content = fs.readFileSync('./site' + req.url, 'utf8')
+            let content = fs.readFileSync('./site' + req.url)
             res.end(content)
         }catch(err) {
             res.statusCode = 404;
