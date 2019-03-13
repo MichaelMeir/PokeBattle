@@ -1,0 +1,23 @@
+{
+  "name": "pokebattle",
+  "version": "1.0.0",
+  "description": "Pokebattle school project",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "pokemon"
+  ],
+  "dependencies": {
+    "axios": "^0.18.0",
+    "bcrypt": "^3.0.4",
+    "express": "^4.16.4",
+    "helmet": "^3.16.0",
+    "mime-types": "^2.1.22",
+    "mysql2": "^1.6.5",
+    "sequelize": "^4.43.0"
+  },
+  "author": "Michael Meir",
+  "license": "ISC"
+}
