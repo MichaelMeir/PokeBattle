@@ -1,24 +1,16 @@
 <html>
     <head>
         <title>PokeBattle</title>
-        <link rel="stylesheet" href="/static/css/basic.css">
+        <link rel="stylesheet" href="/static/css/index.css">
     </head>
     <body>
-        <div id="battle">
-            <div class="pokescreen">
-                <live-text id="ownPokemonStr" type="label" data='{"level": 5, "name": "Pikachu"}'>{{ name }} - lvl. {{ level }}</live-text>
-                <div class="progress" style="width:100%">
-                    <div id="ownPokemon" class="inner" style="width:20%"></div>
-                </div>
-            </div>
-            <div class="pokescreen">
-                <live-text id="enemyPokemonStr" type="label" data='{"level": 5, "name": "Ditto"}'>{{ name }} - lvl. {{ level }}</live-text>
-                <div class="progress" style="width:100%">
-                    <div id="enemyPokemon" class="inner" style="width:20%"></div>
-                </div>
+        <div class="center">
+            <input id="token-input" class="full" type="text" placeholder="User Token">
+            <div class="flex full">
+                <span onclick="NewUser()" class="cursor-pointer">New</span>
+                <span onclick="GetUser()" class="push cursor-pointer">Load</span>
             </div>
         </div>
-        <textarea name="" id="" cols="50" rows="10"></textarea>
-        <script src="/static/js/main.js"></script>
+        <script src="/static/js/index.js"></script>
     </body>
 </html>

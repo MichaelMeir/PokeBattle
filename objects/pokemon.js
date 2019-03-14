@@ -1,9 +1,11 @@
 class Pokemon {
-    constructor(id = -1, name = '', type = [], hp = 100, atk = 20, def = 20, sp_atk = 30, sp_def = 30, spd = 50, actions = []) {
+    constructor(id = -1, name = '', level = 0, exp = 0, type = [], hp = 100, atk = 20, def = 20, sp_atk = 30, sp_def = 30, spd = 50, actions = []) {
         this.id = id
         this.base_name = name
         this.name = name
         this.type = type
+        this.level = level
+        this.exp = exp
         this.default_stats = {
             'HP': hp,
             'ATTACK': atk,
@@ -58,8 +60,8 @@ exports.DynamicPokemonClassifier = function (data = []) {
     for(let i = 0; i < data.length; i++) {
         let pokemon = data[i]
         let C = class extends Pokemon {
-            constructor(display_name = '', actions = []) {
-                super(pokemon.id, pokemon.name.english, pokemon.type, 
+            constructor(display_name = '', actions = [], level = 0, xp = 0) {
+                super(pokemon.id, pokemon.name.english, level, xp, pokemon.type, 
                     pokemon.base['HP'], 
                     pokemon.base['Attack'], 
                     pokemon.base['Defense'], 

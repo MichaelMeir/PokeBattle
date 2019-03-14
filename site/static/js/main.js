@@ -1,24 +1,37 @@
 const req = {
-    post: (url = '/', func = (req) => {}, params = {}, headers = {}, async = false) => {
-        perform(url, func, params, headers, async, 'post')
-    },
-    get: (url = '/', params = {}, headers = {}, async = false) => {
-        perform(url, func, params, headers, async, 'get')
-    },
-    perform(url = '/', params = {}, headers = {}, async = false, method = 'get') {
-        var req = new XMLHttpRequest();
-        for(let i = 0; i < Object.keys(headers); i++) {
-            req.setRequestHeader(Object.keys(headers)[i], headers[Object.keys(headers)[i]])
-        }
-        req.onreadystatechange = function() {
-            if (this.readyState == 4 && this.status == 200) {
-                func(this)
-            }
+	post: (url = "/", func = req => {}, params = {}, async = true) => {
+        let request = req.perform(func);
+        request.open('post', url, async);
+        request.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+        request.send(JSON.stringify(params));
+	},
+	get: (url = "/", func = req => {}, params = {}, async = true) => {
+        let request = req.perform(func);
+        request.open('get', url, async);
+        request.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+        let parameters = [];
+		for (let i = 0; i < Object.keys(params).length; i++) {
+			parameters.push(
+				Object.keys(params)[i] + "=" + params[Object.keys(params)[i]]
+			);
+		}
+        request.send(parameters.join('&'));
+	},
+	perform: (func) => {
+		let request = new XMLHttpRequest();
+		request.onreadystatechange = function() {
+			if (this.readyState == 4 && this.status == 200) {
+				try {
+					this.data = JSON.parse(this.responseText);
+				} catch (e) {
+					this.data = {};
+				}
+				func(this);
+			}
         };
-        req.open(method, url, true);
-        req.send(params)
-    }
-}
+		return request
+	}
+};
 
 /**
  *  @class LiveText
@@ -93,8 +106,23 @@ function getLiveTextById(id) {
     return null
 }
 
+let token = ""
+
 window.onload = () => {
     initLiveTexts()
+    token = JSON.parse(getCookie('user-token'))
+    if(token == null) {
+        window.location.replace("/");
+    }
+    getLiveTextById('token').data.token = token
+    req.post('/fighting', (response) => {
+        getLiveTextById('ownPokemonStr').data.name = response.data.pokemon.name
+        getLiveTextById('ownPokemonStr').data.level = response.data.pokemon.level
+        getLiveTextById('ownPokemonImage').data.image = response.data.image
+    }, {
+        'token': token
+    })
+    LoadPokemons()
 }
 
 const ownPokemon = getElement('ownPokemon')
@@ -110,4 +138,38 @@ const enemyPokemon = getElement('enemyPokemon')
  */
 function getElement(id) {
     return document.getElementById(id)
+}
+
+/**
+ * 
+ */
+function LoadPokemons() {
+    req.post('/pokemons', (response) => {
+        console.log(response.data)
+        for(let i = 0; i < response.data.length; i++) {
+            let element = document.createElement('img')
+            element.classList.add('pokemon-index')
+            element.setAttribute('src', response.data[i].pixel)
+            getElement('pokemons').appendChild(element)
+        }
+    },
+    {
+        token: token,
+    })
+}
+
+function getCookie(cname) {
+	var name = cname + "=";
+	var decodedCookie = decodeURIComponent(document.cookie);
+	var ca = decodedCookie.split(";");
+	for (var i = 0; i < ca.length; i++) {
+		var c = ca[i];
+		while (c.charAt(0) == " ") {
+			c = c.substring(1);
+		}
+		if (c.indexOf(name) == 0) {
+			return c.substring(name.length, c.length);
+		}
+	}
+	return null;
 }

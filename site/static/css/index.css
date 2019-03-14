@@ -1,0 +1,26 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto');
+
+html {
+    font-family: 'Roboto', sans-serif;
+}
+
+.push {
+    margin-left: auto;
+}
+
+.flex {
+    display: flex;
+}
+
+.full {
+    width: 100%
+}
+
+.center {
+    width: 20%;
+    margin: auto auto
+}
+
+.cursor-pointer {
+    cursor: pointer;
+}

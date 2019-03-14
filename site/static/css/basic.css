@@ -1,3 +1,13 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto');
+
+html {
+    font-family: 'Roboto', sans-serif;
+}
+
+.full {
+    width: 100%
+}
+
 .progress {
     padding: 0px;
     height: 3px;
@@ -19,4 +29,8 @@
 .pokescreen {
     width: 20%;
     margin: 25px;
+}
+
+#ownPokemonImage {
+    transform: scaleX(-1);
 }

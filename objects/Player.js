@@ -12,19 +12,17 @@ class Player {
 
 let players = {}
 
-exports.NewPlayer = (pokemons, level, exp, inventory_size, money, token = "") => {
-    let unique = false
-    while(!unique) {
-        unique = true
-        if(players[token]) {
-            unique = false
+exports.NewPlayer = (pokemons, level, exp, inventory_size, money, token_ = "") => {
+    let token = token_
+    while(true) {
+        if(players[token] != undefined || token == "") {
+            token = CreateToken(25)
         }else{
             break
         }
-        token = CreateToken(25)
     }
     let pl = new Player(token, pokemons, level, exp, inventory_size, money)
-    players.push(pl)
+    players[token] = pl
     return pl
 }
 
