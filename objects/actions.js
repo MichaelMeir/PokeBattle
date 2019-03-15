@@ -9,3 +9,34 @@ class PokemonAction {
         this.action = action
     }
 }
+
+exports.PokemonAction
+
+/** 
+ *  @function
+ *  @name DynamicActionClassGenerator
+ *  @description dynamically converts json data to action classes
+ * 
+ *  @param {array} data
+ */
+exports.DynamicActionClassGenerator = function (data = []) {
+    for(let i = 0; i < data.length; i++) {
+        let pokemon = data[i]
+        let C = class extends PokemonAction {
+            constructor(pp_remaining_percentage) {
+                if(pokemon.power == null) {
+                    super(pokemon.id, pokemon.ename, pokemon.accuracy, pokemon.pp, pokemon.power, pokemon.type, (enemy, self, action) => {
+                        self.hp += action.pp
+                    })
+                }else{
+                    super(pokemon.id, pokemon.ename, pokemon.accuracy, pokemon.pp, pokemon.power, pokemon.type, (enemy, self, action) => {
+                        enemy.damage(action)
+                    })
+                }
+            }
+        }
+        let name = pokemon.ename.charAt(0).toUpperCase() + pokemon.ename.slice(1)
+        Object.defineProperty(C, 'name', {value: name});
+        exports[name] = C
+    }
+}

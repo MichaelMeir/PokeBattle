@@ -1,3 +1,10 @@
+const fs = require('fs')
+const actions = require('./actions')
+const types = require('./types')
+
+actions.DynamicActionClassGenerator(JSON.parse(fs.readFileSync('./data/skills.json', 'utf8')))
+types.DynamicTypeClassGenerator(JSON.parse(fs.readFileSync('./data/types.json', 'utf8')))
+
 class Pokemon {
     constructor(id = -1, name = '', level = 0, exp = 0, type = [], hp = 100, atk = 20, def = 20, sp_atk = 30, sp_def = 30, spd = 50, actions = []) {
         this.id = id
@@ -46,7 +53,36 @@ class Pokemon {
     getPixelImage() {
         return '/static/images/pokemon/pixel/' + ("00" + this.id).slice(-3) + 'MS.png'
     }
+
+    damage(skill) {
+        let multiplier = getTypeMultiplier(skill)
+        this.hp -= (skill.power * multiplier)
+        return multiplier
+    }
+
+    getTypeMultiplier(skill) {
+        if(types[this.type] != null) {
+            let type = new types[this.type]()
+            for(let i = 0; i < type.weaknesses; i++) {
+                if(type.weaknesses[i] == skill.type) {
+                    return 1.5
+                }
+            }
+            for(let i = 0; i < type.strengths; i++) {
+                if(type.strengths[i] == skill.type) {
+                    return 0.5
+                }
+            }
+            for(let i = 0; i < type.immune; i++) {
+                if(type.immune[i] == skill.type) {
+                    return 0
+                }
+            }
+        }
+        return 1
+    }
 }
+
 exports.Pokemon = Pokemon
 
 /** 
@@ -56,7 +92,7 @@ exports.Pokemon = Pokemon
  * 
  *  @param {array} data
  */
-exports.DynamicPokemonClassifier = function (data = []) {
+exports.DynamicPokemonClassGenerator = function (data = []) {
     for(let i = 0; i < data.length; i++) {
         let pokemon = data[i]
         let C = class extends Pokemon {

@@ -6,7 +6,7 @@ const util = require('util')
 const pokedex = require('./objects/pokemon')
 const players = require('./objects/Player')
 
-pokedex.DynamicPokemonClassifier(JSON.parse(fs.readFileSync('./data/pokedex.json', 'utf8')))
+pokedex.DynamicPokemonClassGenerator(JSON.parse(fs.readFileSync('./data/pokedex.json', 'utf8')))
 
 exports.routes = [
     /**
