@@ -7,6 +7,21 @@ class Player {
         this.inventory_size = inventory_size
         this.money = money
         this.fighting = null
+        this.enemy = null
+    }
+
+    enemyAttack() {
+        if(this.enemy == null) {
+            console.log("player has no enemy")
+            return
+        }
+        this.fighting.damage(this.enemy.actions[Math.floor(Math.random() * this.enemy.actions.length)])
+    }
+
+    ownAttack(skillIndex) {
+        if(!(skillIndex > 0 && skillIndex < this.fighting.actions.length)) return
+        this.enemy.damage(this.fighting.actions[skillIndex])
+        this.enemyAttack()
     }
 }
 

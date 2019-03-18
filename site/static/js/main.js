@@ -149,6 +149,17 @@ function LoadPokemons() {
         for(let i = 0; i < response.data.length; i++) {
             let element = document.createElement('img')
             element.classList.add('pokemon-index')
+            element.onclick = () => {
+                req.post('/swap', (response) => {
+                    getLiveTextById('ownPokemonStr').data.name = response.data.pokemon.name
+                    getLiveTextById('ownPokemonStr').data.level = response.data.pokemon.level
+                    getLiveTextById('ownPokemonImage').data.image = response.data.image
+                    getElement('ownPokemon').style.width = Math.floor((response.data.pokemon.stats['HP'] / response.data.pokemon.default_stats['HP']) * 100) + "%"
+                }, {
+                    'token': token,
+                    'index': i
+                })
+            }
             element.setAttribute('src', response.data[i].pixel)
             getElement('pokemons').appendChild(element)
         }

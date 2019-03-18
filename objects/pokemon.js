@@ -1,9 +1,9 @@
 const fs = require('fs')
-const actions = require('./actions')
-const types = require('./types')
+const actionsList = require('./actions')
+const typesList = require('./types')
 
-actions.DynamicActionClassGenerator(JSON.parse(fs.readFileSync('./data/skills.json', 'utf8')))
-types.DynamicTypeClassGenerator(JSON.parse(fs.readFileSync('./data/types.json', 'utf8')))
+actionsList.DynamicActionClassGenerator(JSON.parse(fs.readFileSync('./data/skills.json', 'utf8')))
+typesList.DynamicTypeClassGenerator(JSON.parse(fs.readFileSync('./data/types.json', 'utf8')))
 
 class Pokemon {
     constructor(id = -1, name = '', level = 0, exp = 0, type = [], hp = 100, atk = 20, def = 20, sp_atk = 30, sp_def = 30, spd = 50, actions = []) {
@@ -30,6 +30,11 @@ class Pokemon {
             'SPEED': spd
         }
         this.actions = actions
+        if(this.actions.length == 0) {
+            do{
+                this.actions.push(new actionsList.actions[Object.keys(actionsList.actions)[Math.floor(Math.random() * Object.keys(actionsList.actions).length)]]())
+            }while(this.actions.length < 4 && Math.floor(Math.random() * 100) < 25)
+        }
     }
 
     /** 
@@ -55,14 +60,16 @@ class Pokemon {
     }
 
     damage(skill) {
-        let multiplier = getTypeMultiplier(skill)
-        this.hp -= (skill.power * multiplier)
+        let multiplier = this.getTypeMultiplier(skill)
+        console.log(this.base_name + ' got damaged for ' + (skill.power * multiplier) + ' HP')
+        this.stats['HP'] -= (skill.power * multiplier)
+        console.log(this.base_name + ' got ' + this.stats['HP'] + ' HP left')
         return multiplier
     }
 
     getTypeMultiplier(skill) {
-        if(types[this.type] != null) {
-            let type = new types[this.type]()
+        if(typesList[this.type] != null) {
+            let type = new typesList[this.type]()
             for(let i = 0; i < type.weaknesses; i++) {
                 if(type.weaknesses[i] == skill.type) {
                     return 1.5

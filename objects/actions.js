@@ -12,6 +12,8 @@ class PokemonAction {
 
 exports.PokemonAction
 
+exports.actions = {}
+
 /** 
  *  @function
  *  @name DynamicActionClassGenerator
@@ -23,7 +25,7 @@ exports.DynamicActionClassGenerator = function (data = []) {
     for(let i = 0; i < data.length; i++) {
         let pokemon = data[i]
         let C = class extends PokemonAction {
-            constructor(pp_remaining_percentage) {
+            constructor() {
                 if(pokemon.power == null) {
                     super(pokemon.id, pokemon.ename, pokemon.accuracy, pokemon.pp, pokemon.power, pokemon.type, (enemy, self, action) => {
                         self.hp += action.pp
@@ -37,6 +39,6 @@ exports.DynamicActionClassGenerator = function (data = []) {
         }
         let name = pokemon.ename.charAt(0).toUpperCase() + pokemon.ename.slice(1)
         Object.defineProperty(C, 'name', {value: name});
-        exports[name] = C
+        exports.actions[name] = C
     }
 }

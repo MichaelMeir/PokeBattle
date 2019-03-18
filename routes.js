@@ -75,7 +75,7 @@ exports.routes = [
         ], 0, 0, 10, 100)
         player.fighting = player.pokemons[Math.floor(Math.random() * player.pokemons.length)]
         res.end(JSON.stringify(player.token))
-
+        player.enemy = new pokedex[Object.keys(pokedex)[Math.floor(Math.random() * Object.keys(pokedex).length)]]()
     }, 'get'),
 
     /**
@@ -125,4 +125,42 @@ exports.routes = [
             res.end(JSON.stringify(pokemons))
         }
     }, 'post'),
+
+    new Route('/swap', (req, res, route) => {
+        if(route.values.token == undefined) {
+            res.statusCode = 404
+            res.end()
+        }else{
+            players.GetPlayer(route.values.token).fighting = players.GetPlayer(route.values.token).pokemons[route.values.index]
+            players.GetPlayer(route.values.token).enemyAttack()
+            res.end(JSON.stringify({
+                pokemon: players.GetPlayer(route.values.token).fighting,
+                pixel: players.GetPlayer(route.values.token).fighting.getPixelImage(),
+                image: players.GetPlayer(route.values.token).fighting.getImage()
+            }))
+        }
+    }, 'post'),
+
+    new Route('/attack', (req, res, route) => {
+        if(route.values.token == undefined) {
+            res.statusCode = 404
+            res.end()
+        }else{
+            players.GetPlayer(route.values.token).fighting = players.GetPlayer(route.values.token).pokemons[route.values.index]
+            res.end(JSON.stringify({
+                pokemon: players.GetPlayer(route.values.token).fighting,
+                pixel: players.GetPlayer(route.values.token).fighting.getPixelImage(),
+                image: players.GetPlayer(route.values.token).fighting.getImage()
+            }))
+        }
+    }, 'post'),
+
+    new Route('/useAction', (req, res, route) => {
+        if(route.values.token == undefined) {
+            res.statusCode = 404
+            res.end()
+        }else{
+            players.GetPlayer(route.values.token).ownAttack(req.values.actionIndex)
+        }
+    }, 'post')
 ]
