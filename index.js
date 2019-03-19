@@ -27,7 +27,9 @@ app.use((req, res) => {
 })
 
 const server = http.createServer(app);
-server.listen(80);
+server.listen(81);
+
+console.log('server started')
 
 // const httpsServer = https.createServer({
 //     key: fs.readFileSync('./keys/privkey.pem'),

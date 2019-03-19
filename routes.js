@@ -141,12 +141,12 @@ exports.routes = [
         }
     }, 'post'),
 
-    new Route('/attack', (req, res, route) => {
+    new Route('/useAction', (req, res, route) => {
         if(route.values.token == undefined) {
             res.statusCode = 404
             res.end()
         }else{
-            players.GetPlayer(route.values.token).fighting = players.GetPlayer(route.values.token).pokemons[route.values.index]
+            players.GetPlayer(route.values.token).ownAttack(route.values.i)
             res.end(JSON.stringify({
                 pokemon: players.GetPlayer(route.values.token).fighting,
                 pixel: players.GetPlayer(route.values.token).fighting.getPixelImage(),
@@ -155,12 +155,16 @@ exports.routes = [
         }
     }, 'post'),
 
-    new Route('/useAction', (req, res, route) => {
+    new Route('/enemyDetails', (req, res, route) => {
         if(route.values.token == undefined) {
             res.statusCode = 404
             res.end()
         }else{
-            players.GetPlayer(route.values.token).ownAttack(req.values.actionIndex)
+            res.end(JSON.stringify({
+                pokemon: players.GetPlayer(route.values.token).enemy,
+                pixel: players.GetPlayer(route.values.token).enemy.getPixelImage(),
+                image: players.GetPlayer(route.values.token).enemy.getImage()
+            }))
         }
     }, 'post')
 ]

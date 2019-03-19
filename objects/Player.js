@@ -15,11 +15,13 @@ class Player {
             console.log("player has no enemy")
             return
         }
-        this.fighting.damage(this.enemy.actions[Math.floor(Math.random() * this.enemy.actions.length)])
+        let skill = this.enemy.actions[Math.floor(Math.random() * this.enemy.actions.length)]
+        console.log(this.enemy.name + ' used ' + skill.name)
+        this.fighting.damage(skill)
     }
 
     ownAttack(skillIndex) {
-        if(!(skillIndex > 0 && skillIndex < this.fighting.actions.length)) return
+        if(!(skillIndex >= 0 && skillIndex < this.fighting.actions.length)) return
         this.enemy.damage(this.fighting.actions[skillIndex])
         this.enemyAttack()
     }
@@ -45,7 +47,7 @@ exports.GetPlayer = (token) => {
     return players[token]
 }
 
-function CreateToken(length = 15, usable = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-+@#!%$*()?1234567890") {
+function CreateToken(length = 15, usable = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890") {
     let out = ''
     for(let i = 0; i < length; i++) {
         out += usable.split('')[Math.floor(Math.random() * usable.length)];

@@ -119,9 +119,28 @@ window.onload = () => {
         getLiveTextById('ownPokemonStr').data.name = response.data.pokemon.name
         getLiveTextById('ownPokemonStr').data.level = response.data.pokemon.level
         getLiveTextById('ownPokemonImage').data.image = response.data.image
+        getElement('actions').innerHTML = ""
+        for(let i = 0; i < response.data.pokemon.actions.length; i++) {
+            let action = document.createElement('button')
+            action.innerHTML = response.data.pokemon.actions[i].name
+            action.onclick = () => {
+                req.post('/useAction', (response) => {
+                    getLiveTextById('ownPokemonStr').data.name = response.data.pokemon.name
+                    getLiveTextById('ownPokemonStr').data.level = response.data.pokemon.level
+                    getLiveTextById('ownPokemonImage').data.image = response.data.image
+                    getElement('ownPokemon').style.width = response.data.pokemon.stats['HP'] <= 0 ? "0%" : Math.floor((response.data.pokemon.stats['HP'] / response.data.pokemon.default_stats['HP']) * 100) + "%"
+                    getEnemyDetails()
+                }, {
+                    'token': token,
+                    'i': i
+                })
+            }
+            getElement('actions').appendChild(action)
+        }
     }, {
         'token': token
     })
+    getEnemyDetails()
     LoadPokemons()
 }
 
@@ -154,7 +173,25 @@ function LoadPokemons() {
                     getLiveTextById('ownPokemonStr').data.name = response.data.pokemon.name
                     getLiveTextById('ownPokemonStr').data.level = response.data.pokemon.level
                     getLiveTextById('ownPokemonImage').data.image = response.data.image
-                    getElement('ownPokemon').style.width = Math.floor((response.data.pokemon.stats['HP'] / response.data.pokemon.default_stats['HP']) * 100) + "%"
+                    getElement('ownPokemon').style.width = response.data.pokemon.stats['HP'] <= 0 ? "0%" : Math.floor((response.data.pokemon.stats['HP'] / response.data.pokemon.default_stats['HP']) * 100) + "%"
+                    getElement('actions').innerHTML = ""
+                    for(let i = 0; i < response.data.pokemon.actions.length; i++) {
+                        let action = document.createElement('button')
+                        action.innerHTML = response.data.pokemon.actions[i].name
+                        action.onclick = () => {
+                            req.post('/useAction', (response) => {
+                                getLiveTextById('ownPokemonStr').data.name = response.data.pokemon.name
+                                getLiveTextById('ownPokemonStr').data.level = response.data.pokemon.level
+                                getLiveTextById('ownPokemonImage').data.image = response.data.image
+                                getElement('ownPokemon').style.width = response.data.pokemon.stats['HP'] <= 0 ? "0%" : Math.floor((response.data.pokemon.stats['HP'] / response.data.pokemon.default_stats['HP']) * 100) + "%"
+                            }, {
+                                'token': token,
+                                'actionIndex': i
+                            })
+                            getEnemyDetails()
+                        }
+                        getElement('actions').appendChild(action)
+                    }
                 }, {
                     'token': token,
                     'index': i
@@ -183,4 +220,15 @@ function getCookie(cname) {
 		}
 	}
 	return null;
+}
+
+function getEnemyDetails() {
+    req.post('/enemyDetails', (response) => {
+        getLiveTextById('enemyPokemonStr').data.name = response.data.pokemon.name
+        getLiveTextById('enemyPokemonStr').data.level = response.data.pokemon.level
+        getLiveTextById('enemyPokemonImage').data.image = response.data.image
+        getElement('enemyPokemon').style.width = response.data.pokemon.stats['HP'] <= 0 ? "0%" : Math.floor((response.data.pokemon.stats['HP'] / response.data.pokemon.default_stats['HP']) * 100) + "%"
+    }, {
+        'token': token,
+    })
 }
