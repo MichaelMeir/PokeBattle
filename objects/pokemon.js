@@ -99,24 +99,54 @@ exports.Pokemon = Pokemon
  * 
  *  @param {array} data
  */
-exports.DynamicPokemonClassGenerator = function (data = []) {
-    for(let i = 0; i < data.length; i++) {
-        let pokemon = data[i]
-        let C = class extends Pokemon {
-            constructor(display_name = '', actions = [], level = 0, xp = 0) {
-                super(pokemon.id, pokemon.name.english, level, xp, pokemon.type, 
-                    pokemon.base['HP'], 
-                    pokemon.base['Attack'], 
-                    pokemon.base['Defense'], 
-                    pokemon.base['Sp. Attack'], 
-                    pokemon.base['Sp. Defense'], 
-                    pokemon.base['Speed'],
-                    actions)
-                    this.display_name = display_name
-            }
-        }
-        let name = pokemon.name.english.charAt(0).toUpperCase() + pokemon.name.english.slice(1)
-        Object.defineProperty(C, 'name', {value: name});
-        exports[name] = C
+// exports.DynamicPokemonClassGenerator = function (data = []) {
+//     for(let i = 0; i < data.length; i++) {
+//         let pokemon = data[i]
+//         let C = class extends Pokemon {
+//             constructor(display_name = '', actions = [], level = 0, xp = 0) {
+//                 super(pokemon.id, pokemon.name.english, level, xp, pokemon.type, 
+//                     pokemon.base['HP'], 
+//                     pokemon.base['Attack'], 
+//                     pokemon.base['Defense'], 
+//                     pokemon.base['Sp. Attack'], 
+//                     pokemon.base['Sp. Defense'], 
+//                     pokemon.base['Speed'],
+//                     actions)
+//                     this.display_name = display_name
+//             }
+//         }
+//         let name = pokemon.name.english.charAt(0).toUpperCase() + pokemon.name.english.slice(1)
+//         Object.defineProperty(C, 'name', {value: name});
+//         exports[name] = C
+//     }
+// }
+
+exports['Pikachu'] = class Pikachu extends Pokemon {
+    constructor(display_name = '', actions = [], level = 0, xp = 0) {
+        super(25, 'Pikachu', level, xp, 'Electric', 100, 20, 20, 10, 10, 30, actions, display_name)
+    }
+}
+
+exports['Squirtle'] = class Squirtle extends Pokemon {
+    constructor(display_name = '', actions = [], level = 0, xp = 0) {
+        super(7, 'Squirtle', level, xp, 'Water', 120, 20, 10, 20, 10, 50, actions, display_name)
+    }
+}
+
+exports['Bulbasaur'] = class Bulbasaur extends Pokemon {
+    constructor(display_name = '', actions = [], level = 0, xp = 0) {
+        super(1, 'Bulbasaur', level, xp, 'Normal', 150, 10, 10, 10, 10, 0, actions, display_name)
+    }
+}
+
+exports['Ditto'] = class Ditto extends Pokemon {
+    constructor(display_name = '', actions = [], level = 0, xp = 0) {
+        super(132, 'Ditto', level, xp, 'Normal', 50, 10, 10, 10, 10, 50, actions, display_name)
+    }
+}
+
+exports['Charmander'] = class Charmander extends Pokemon {
+    constructor(display_name = '', actions = [], level = 0, xp = 0) {
+        super(4, 'Charmander', level, xp, 'Normal', 80, 20, 20, 10, 10, 20, actions, display_name)
     }
 }
